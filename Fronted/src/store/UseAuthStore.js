@@ -6,7 +6,7 @@ import {toast} from 'react-hot-toast';
 // import { connect, disconnect } from 'mongoose';
 import { io } from "socket.io-client";
 
-const BASE_URL ="http://localhost:5005"; 
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5005" : "https://chat-app-backend-b6c3.onrender.com"; 
 // const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5005" : "/";
  export const UseAuthStore = create((set,get )=>({
     authUser:null,

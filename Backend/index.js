@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser');
 const {app, server} = require('./src/utils/socket.js');
 
 const PORT=process.env.PORT;
-// const __dirname=path.resolve();
+const __dirname=path.resolve();
 // const app=express();
 
 app.use(cors({
@@ -27,7 +27,13 @@ app.use('/uploads',express.static('uploads'));
 
 app.use('/auth',authrouter);
 app.use('/messages',msgrouter)
+if(process.env.NODE_ENV==='production'){
+    app.use(express.static(path.join(__dirname,'../Frontend/dist')));
+    app.get('*',(req,res)=>{
+        res.sendFile(path.join(__dirname,'../FronteNd','dist','index.html'));
+    }); 
 
+}
 server.listen(PORT || 5000,()=>{   
     connectDB();
     console.log(`Server is running on port ${PORT}`)
