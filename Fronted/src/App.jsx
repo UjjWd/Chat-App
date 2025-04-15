@@ -21,7 +21,7 @@ export const App = () => {
 
  useEffect(() => {
   checkAuth(); // this is key for reconnecting socket
-}, []);
+}, [checkAuth]);
 
 
 useEffect(() => {
