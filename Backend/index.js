@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser');
 const {app, server} = require('./src/utils/socket.js');
 
 const PORT=process.env.PORT;
-const __dirname=path.resolve();
+// const __dirname=path.resolve();
 // const app=express();
 
 app.use(cors({
