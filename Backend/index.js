@@ -12,6 +12,7 @@ const connectDB = require('./src/db/connection.db.js');
 const authrouter = require('./src/routes/auth.route.js');
 const msgrouter = require('./src/routes/msg.route.js');
 const { app, server } = require('./src/utils/socket.js');
+const { dir } = require('console');
 
 // Constants
 const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ app.use(cors({
 }));
 
 // Middlewares
+// const dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
@@ -37,13 +39,16 @@ app.use('/messages', msgrouter);
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-  const __dirname = path.resolve(); // Only define it here to avoid redeclaration errors
-  app.use(express.static(path.join(__dirname, '../Frontend/dist')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend', 'dist', 'index.html'));
-  });
-}
+    const path = require('path');
+    const dirname = path.resolve();
+  
+    app.use(express.static(path.join(dirname, '/Frontend/dist')));
+  
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(dirname, '/Frontend/dist/index.html'));
+    });
+  }
+  
 
 // Start server
 server.listen(PORT, () => {
