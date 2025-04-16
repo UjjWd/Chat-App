@@ -23,7 +23,7 @@ const signup = async (req, res) => {
         console.log("Token generated:", token);
 
         // Update: Send the token in a cookie instead of directly in the response
-        res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "Strict" });
+        res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "None" });
 
         console.log("User created successfully:", newUser);
         return res.status(201).json({ message: 'Signup successful', user: newUser });
@@ -46,7 +46,7 @@ const login =async (req, res) => {
     }
     // If successful, send a response with a success message
     const token= await user.generateAccesstoken();
-    res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"Strict"})
+    res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"None"})
     console.log("Login successful:", user);
     
 
@@ -59,7 +59,7 @@ const login =async (req, res) => {
 const logout =async (req, res) => {
     // Perform logout logic here
     // For example, clear the session or token
-     res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "Strict" });
+     res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "None" });
     console.log("Logout successful");
     // If successful, send a response with a success message
     res.status(200).json({ message: 'Logout successful' });
