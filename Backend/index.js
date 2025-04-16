@@ -12,11 +12,10 @@ const connectDB = require('./src/db/connection.db.js');
 const authrouter = require('./src/routes/auth.route.js');
 const msgrouter = require('./src/routes/msg.route.js');
 const { app, server } = require('./src/utils/socket.js');
-const { dir } = require('console');
 
 // Constants
 const PORT = process.env.PORT || 5000;
-const FRONTEND_URL = 'https://chat-app-three-ochre.vercel.app/';
+const FRONTEND_URL = 'https://chat-app-three-ochre.vercel.app';
 
 // CORS configuration
 app.use(cors({
@@ -25,7 +24,6 @@ app.use(cors({
 }));
 
 // Middlewares
-// const dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
@@ -37,18 +35,18 @@ app.use('/uploads', express.static('uploads'));
 app.use('/auth', authrouter);
 app.use('/messages', msgrouter);
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-    const path = require('path');
-    const dirname = path.resolve();
-  
-    app.use(express.static(path.join(dirname, '/Frontend/dist')));
-  
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(dirname, '/Frontend/dist/index.html'));
-    });
-  }
-  
+// 🔥 REMOVE frontend serving in production (handled by Vercel)
+// if (process.env.NODE_ENV === 'production') {
+//   const path = require('path');
+//   const dirname = path.resolve();
+
+//   app.use(express.static(path.join(dirname, '/Frontend/dist')));
+
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.join(dirname, '/Frontend/dist/index.html'));
+//   });
+// }
+
 // Start server
 server.listen(PORT, () => {
   connectDB();
