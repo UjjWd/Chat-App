@@ -16,7 +16,7 @@ const { dir } = require('console');
 
 // Constants
 const PORT = process.env.PORT || 5000;
-const FRONTEND_URL = 'https://chat-app-fronted-nq99.onrender.com';
+const FRONTEND_URL = 'https://chat-app-three-ochre.vercel.app/';
 
 // CORS configuration
 app.use(cors({

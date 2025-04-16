@@ -6,7 +6,7 @@ import {toast} from 'react-hot-toast';
 // import { connect, disconnect } from 'mongoose';
 import { io } from "socket.io-client";
 
-const BASE_URL = "https://chat-app-backend-b6c3.onrender.com"; 
+const BASE_URL = "https://chat-app-e5s9.vercel.app/"; 
 // const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5005" : "/";
  export const UseAuthStore = create((set,get )=>({
     authUser:null,
