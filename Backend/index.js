@@ -1,42 +1,52 @@
-const express=require('express');
-const mongoose=require('mongoose'); 
-const cors=require('cors');
-const dotenv=require('dotenv');
-const path=require('path');
-dotenv.config();
-// const cors=require('cors');
-const connectDB=require('./src/db/connection.db.js');
-const authrouter=require('./src/routes/auth.route.js');
-const msgrouter=require('./src/routes/msg.route.js')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 
-const {app, server} = require('./src/utils/socket.js');
+dotenv.config();
 
-const PORT=process.env.PORT;
-// const __dirname=path.resolve();
-// const app=express();
+// Custom modules
+const connectDB = require('./src/db/connection.db.js');
+const authrouter = require('./src/routes/auth.route.js');
+const msgrouter = require('./src/routes/msg.route.js');
+const { app, server } = require('./src/utils/socket.js');
 
+// Constants
+const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = 'https://chat-app-fronted-nq99.onrender.com';
+
+// CORS configuration
 app.use(cors({
-    origin:'https://chat-app-fronted-nq99.onrender.com',
-    credentials:true,
+  origin: FRONTEND_URL,
+  credentials: true,
 }));
+
+// Middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.urlencoded({extended:false}));
-app.use('/uploads',express.static('uploads'));
+app.use(express.urlencoded({ extended: false }));
 
-app.use('/auth',authrouter);
-app.use('/messages',msgrouter)
-if(process.env.NODE_ENV==='production'){
-    app.use(express.static(path.join(__dirname,'../Frontend/dist')));
-    app.get('*',(req,res)=>{
-        res.sendFile(path.join(__dirname,'../Frontend','dist','index.html'));
-    }); 
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));
 
+// Routes
+app.use('/auth', authrouter);
+app.use('/messages', msgrouter);
+
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve(); // Only define it here to avoid redeclaration errors
+  app.use(express.static(path.join(__dirname, '../Frontend/dist')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'dist', 'index.html'));
+  });
 }
-server.listen(PORT || 5000,()=>{   
-    connectDB();
-    console.log(`Server is running on port ${PORT}`)
-    
-}
-);
+
+// Start server
+server.listen(PORT, () => {
+  connectDB();
+  console.log(`✅ Server is running on port ${PORT}`);
+});
