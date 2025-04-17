@@ -6,7 +6,7 @@ const sendOtpEmail = async (email, otp) => {
   const transporter = require('../config/email');
 
   await transporter.sendMail({
-    from: `"Your App" <${process.env.EMAIL_USER}>`,
+    from: `"Howdy-Verify your Account" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Your OTP Code',
     text: `Your OTP code is ${otp}. It is valid for 5 minutes.`,
