@@ -1,12 +1,10 @@
-
 import { useState } from "react";
-
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { UseAuthStore } from "../store/UseAuthStore";
-
-import {AuthImagePattern} from "../components/AuthImagePattern";
-import  toast from "react-hot-toast";
+import toast from "react-hot-toast";
+import { AuthImagePattern } from "../components/AuthImagePattern";
+import { axiosInstance } from "../utils/axios";
 
 export const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,8 +13,10 @@ export const SignupPage = () => {
     email: "",
     password: "",
   });
-
-  const { signup, isSigningUp } = UseAuthStore();
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const { signup, isSigningUp, sendOtp, verifyOtp } = UseAuthStore();
 
   const validateForm = () => {
     if (!formData.name.trim()) return toast.error("Full name is required");
@@ -29,10 +29,36 @@ export const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const success = validateForm();
+    console.log("Form submitted, validation passed:", success);
+    if (success === true) {
+      setOtpSent(true);
+      sendOtp(formData.email);
+    }
+  };
 
-    if (success === true) signup(formData);
+  const handleOtpVerification = async (e) => {
+    e.preventDefault();
+    console.log("OTP submitted:", otp);
+
+    if (!otp) {
+      return toast.error("OTP is required");
+    }
+
+    setIsVerifyingOtp(true); // Start verifying OTP
+    const success = await verifyOtp(formData.email, otp);
+    console.log("OTP verification success:", success);
+    setIsVerifyingOtp(false); // End verifying OTP
+
+    if (success) {
+      toast.success("OTP verified successfully");
+      signup(formData);
+      setOtpSent(false);
+      setFormData({ name: "", email: "", password: "" });
+      setOtp("");
+    } else {
+      toast.error("Invalid OTP");
+    }
   };
 
   return (
@@ -43,94 +69,127 @@ export const SignupPage = () => {
           {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div
-                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
-              group-hover:bg-primary/20 transition-colors"
-              >
+              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <MessageSquare className="size-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-base-content/60">Get started with your free account</p>
+              <h1 className="text-2xl font-bold mt-2">
+                {otpSent ? "Verify OTP" : "Create Account"}
+              </h1>
+              <p className="text-base-content/60">
+                {otpSent
+                  ? `Enter the OTP sent to ${formData.email}`
+                  : "Get started with your free account"}
+              </p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Full Name</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="size-5 text-base-content/40" />
+          {!otpSent ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Full Name */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Full Name</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="size-5 text-base-content/40" />
+                  </div>
+                  <input
+                    type="text"
+                    className="input input-bordered w-full pl-10"
+                    placeholder="Your full name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
                 </div>
-                <input
-                  type="text"
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="Your full name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
               </div>
-            </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Email</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="size-5 text-base-content/40" />
+              {/* Email */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Email</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail className="size-5 text-base-content/40" />
+                  </div>
+                  <input
+                    type="email"
+                    className="input input-bordered w-full pl-10"
+                    placeholder="you@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
                 </div>
-                <input
-                  type="email"
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
               </div>
-            </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Password</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-base-content/40" />
+              {/* Password */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Password</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="size-5 text-base-content/40" />
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="input input-bordered w-full pl-10"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="size-5 text-base-content/40" />
+                    ) : (
+                      <Eye className="size-5 text-base-content/40" />
+                    )}
+                  </button>
                 </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="size-5 text-base-content/40" />
-                  ) : (
-                    <Eye className="size-5 text-base-content/40" />
-                  )}
-                </button>
               </div>
-            </div>
 
-            <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
-              {isSigningUp ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                "Create Account"
-              )}
-            </button>
-          </form>
+              <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
+                {isSigningUp ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    Sending OTP...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
+              </button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              {/* OTP Input */}
+              <input
+                type="text"
+                className="input input-bordered w-full"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+              <button
+                onClick={handleOtpVerification}
+                className="btn btn-primary w-full"
+                disabled={isVerifyingOtp}
+              >
+                {isVerifyingOtp ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    Verifying OTP...
+                  </>
+                ) : (
+                  "Verify OTP & Complete Signup"
+                )}
+              </button>
+            </div>
+          )}
 
           <div className="text-center">
             <p className="text-base-content/60">
@@ -144,7 +203,6 @@ export const SignupPage = () => {
       </div>
 
       {/* right side */}
-
       <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."

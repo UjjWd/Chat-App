@@ -3,6 +3,29 @@ const User = require('../models/user.model.js'); // Adjust the path as needed
 const uploadImage = require('../utils/cloudinary.utils.js'); // Adjust the path as needed
 // const authMiddleware = require('../middleware/auth.middleware.js'); // Adjust the path as needed
 
+
+// POST /send-otp
+const { generateOtp, sendOtpEmail } = require('../utils/otp.js');
+const { saveOtp } = require('../config/otpStore.js');
+// POST /verify-otp
+const { verifyOtp } = require('../config/otpStore.js');
+
+const checkotp=async (req, res) => {
+  const { email, otp } = req.body;
+  const isValid = verifyOtp(email, otp);
+  if (!isValid) return res.status(400).json({ message: 'Invalid or expired OTP' });
+  res.json({ message: 'OTP verified' });
+};
+
+
+const sendotp= async (req, res) => {
+  const { email } = req.body;
+  const otp = generateOtp();
+  saveOtp(email, otp);
+  await sendOtpEmail(email, otp);
+  res.json({ message: 'OTP sent' });
+};
+
 const signup = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -97,6 +120,8 @@ module.exports = {
     login,
     logout,
     uploadProfilePicture,
-    checkAuth
+    checkAuth,
+    sendotp,
+    checkotp
 
 }

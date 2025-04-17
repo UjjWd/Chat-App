@@ -17,6 +17,35 @@ const LOCAL_URL = "http://localhost:5005";
     isCheckingAuth:true,
     onlineUsers:[],
     socket:null,
+
+    // otpVerified:false,
+    sendOtp: async (email) => {
+        // set({ otpSent: true });
+        try {
+            const res = await axiosInstance.post('/auth/send-otp', { email });
+            console.log(res.data);
+            toast.success("OTP sent to your email");
+        } catch (error) {
+            console.error('Error sending OTP:', error);
+            toast.error("Error sending OTP");
+        } 
+      },
+      verifyOtp: async (email, otp) => {
+        try {
+          const res = await axiosInstance.post('/auth/verify-otp', { email, otp });
+          console.log(res.data);
+          // toast.success("OTP verified successfully");
+          return true; // ✅ important
+        } catch (error) {
+          console.error('Error verifying OTP:', error);
+          // toast.error("Invalid OTP"); // move toast here
+          return false; // ✅ important
+        }
+      },
+      
+
+
+
     checkAuth: async () => {
         try {
             const response = await axiosInstance.get('/auth/check');
