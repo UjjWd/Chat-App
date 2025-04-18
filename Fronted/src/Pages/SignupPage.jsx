@@ -77,7 +77,13 @@ export const SignupPage = () => {
               </h1>
               <p className="text-base-content/60">
                 {otpSent
-                  ? `Enter the OTP sent to ${formData.email}`
+                  ? `Enter the OTP sent to ${formData.email}.
+                  Check your spam folder if you don't receive it.`
+                  
+                  
+
+                
+
                   : "Get started with your free account"}
               </p>
             </div>
