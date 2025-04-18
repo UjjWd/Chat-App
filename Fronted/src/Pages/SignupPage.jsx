@@ -14,9 +14,9 @@ export const SignupPage = () => {
     password: "",
   });
   const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
+  // const [otpSent, setOtpSent] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
-  const { signup, isSigningUp, sendOtp, verifyOtp } = UseAuthStore();
+  const { signup, isSigningUp, sendOtp, verifyOtp,otpSent } = UseAuthStore();
 
   const validateForm = () => {
     if (!formData.name.trim()) return toast.error("Full name is required");
@@ -32,7 +32,7 @@ export const SignupPage = () => {
     const success = validateForm();
     console.log("Form submitted, validation passed:", success);
     if (success === true) {
-      setOtpSent(true);
+      // setOtpSent(true);
       sendOtp(formData.email);
     }
   };
@@ -53,7 +53,7 @@ export const SignupPage = () => {
     if (success) {
       toast.success("OTP verified successfully");
       signup(formData);
-      setOtpSent(false);
+      // setOtpSent(false);
       setFormData({ name: "", email: "", password: "" });
       setOtp("");
     } else {

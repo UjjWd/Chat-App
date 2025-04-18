@@ -1,6 +1,7 @@
 // otpStore.js
 const otpMap = new Map();
 
+
 const saveOtp = (email, otp) => {
   otpMap.set(email, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
   console.log(`OTP for ${email} saved: ${otp}`);

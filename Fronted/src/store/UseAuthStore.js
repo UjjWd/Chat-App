@@ -17,10 +17,13 @@ const LOCAL_URL = "http://localhost:5005";
     isCheckingAuth:true,
     onlineUsers:[],
     socket:null,
+    otpSent:false,
+
 
     // otpVerified:false,
     sendOtp: async (email) => {
-        // set({ otpSent: true });
+        set({ otpSent: true });
+
         try {
             const res = await axiosInstance.post('/auth/send-otp', { email });
             console.log(res.data);
@@ -74,6 +77,7 @@ const LOCAL_URL = "http://localhost:5005";
           // console.error("Error signing up:", error.response.data.message);
         } finally {
           set({ isSigningUp: false });
+          set({ otpSent: false });
         }
       },
      logout:async () => {
