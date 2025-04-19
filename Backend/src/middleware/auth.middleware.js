@@ -7,7 +7,8 @@ const authMiddleware = async (req, res, next) => {
     const token = req.cookies.token; // Assuming you're using cookies to store the token
 
     if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        
+        return res.status(401).json({ message: 'Unauthorized not possible' });
     }
 
     try {

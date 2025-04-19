@@ -69,7 +69,9 @@ const login =async (req, res) => {
     }
     // If successful, send a response with a success message
     const token= await user.generateAccesstoken();
-    res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"None"})
+    // res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"None"})
+    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==='production', sameSite: "Lax" });
+  
     console.log("Login successful:", user);
     
 

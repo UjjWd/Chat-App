@@ -78,7 +78,10 @@ export const SignupPage = () => {
               <p className="text-base-content/60">
                 {otpSent
                   ? `Enter the OTP sent to ${formData.email}.
-                  Check your spam folder if you don't receive it.`
+
+                  Check your spam folder if you don't receive it.
+                  
+                  `
                   
                   
 
