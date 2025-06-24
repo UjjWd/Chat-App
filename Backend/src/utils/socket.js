@@ -9,6 +9,8 @@ const FRONTEND_URL = "https://chat-app-three-ochre.vercel.app/"; // Change to yo
 const io = new Server(server, {
   cors: {
     origin: FRONTEND_URL, // Change to your frontend URL in production
+    methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
