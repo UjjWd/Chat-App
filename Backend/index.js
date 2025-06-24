@@ -41,17 +41,6 @@ app.use('/auth', authrouter);
 app.use('/messages', msgrouter);
 app.use("/api/stream", streamRoutes);
 
-// 🔥 REMOVE frontend serving in production (handled by Vercel)
-// if (process.env.NODE_ENV === 'production') {
-//   const path = require('path');
-//   const dirname = path.resolve();
-
-//   app.use(express.static(path.join(dirname, '/Frontend/dist')));
-
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.join(dirname, '/Frontend/dist/index.html'));
-//   });
-// }
 
 // Start server
 server.listen(PORT, () => {
