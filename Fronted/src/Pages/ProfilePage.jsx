@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { UseAuthStore } from "../store/UseAuthStore";
 import { Camera, Mail, User } from "lucide-react";
+import toast from "react-hot-toast";
+import { Navbar } from "../components/Navbar";
 
 export const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = UseAuthStore();
@@ -22,6 +24,8 @@ export const ProfilePage = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="h-screen pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
         <div className="bg-base-300 rounded-xl p-6 space-y-8">
@@ -99,5 +103,6 @@ export const ProfilePage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

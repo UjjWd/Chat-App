@@ -1,7 +1,7 @@
 import { THEMES } from "../constants/index";
 import { UseThemeStore } from "../store/UseThemeStore";
 import { Send } from "lucide-react";
-
+import { Navbar } from "../components/Navbar";
 const PREVIEW_MESSAGES = [
   { id: 1, content: "Hey! How's it going?", isSent: false },
   { id: 2, content: "I'm doing great! How are you, buddy.", isSent: true },
@@ -11,6 +11,8 @@ export const SettingsPage = () => {
   const { theme, setTheme } =UseThemeStore();
 
   return (
+    <>
+    <Navbar />
     <div className="h-screen container mx-auto px-4 pt-20 max-w-5xl">
       <div className="space-y-6">
         <div className="flex flex-col gap-1">
@@ -113,5 +115,6 @@ export const SettingsPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

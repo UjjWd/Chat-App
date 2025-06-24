@@ -46,7 +46,7 @@ console.log(authUser);
   return (
     
     <div data-theme={theme} className="min-h-screen bg-base-100">
-      <Navbar />
+      
      <Routes>
       <Route path="/" element={authUser?<HomePage/>:<Navigate to="/login" />} />
       <Route path="/login" element={!authUser?<LoginPage />:<Navigate to="/"/>} />

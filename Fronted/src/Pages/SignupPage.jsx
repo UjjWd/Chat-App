@@ -5,8 +5,10 @@ import { UseAuthStore } from "../store/UseAuthStore";
 import toast from "react-hot-toast";
 import { AuthImagePattern } from "../components/AuthImagePattern";
 import { axiosInstance } from "../utils/axios";
+import { Navbar } from "../components/Navbar";
 
 export const SignupPage = () => {
+  
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -62,6 +64,8 @@ export const SignupPage = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
@@ -217,5 +221,6 @@ export const SignupPage = () => {
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
       />
     </div>
+    </>
   );
 };

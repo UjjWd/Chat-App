@@ -15,7 +15,7 @@ const msgrouter = require('./src/routes/msg.route.js');
 const { app, server } = require('./src/utils/socket.js');
 
 // Constants
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 const FRONTEND_URL = 'https://chat-app-three-ochre.vercel.app';
 
 // CORS configuration

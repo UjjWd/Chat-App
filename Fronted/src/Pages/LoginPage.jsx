@@ -3,6 +3,7 @@ import { UseAuthStore } from "../store/UseAuthStore";
 import {AuthImagePattern} from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import { Navbar } from "../components/Navbar";
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +19,8 @@ export const LoginPage = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="h-screen grid lg:grid-cols-2">
       {/* Left Side - Form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
@@ -113,5 +116,6 @@ export const LoginPage = () => {
         title={"Welcome back!"}subtitle={"Sign in to continue your conversations and catch up with your messages."}
       />
     </div>
+    </>
   );
 };
