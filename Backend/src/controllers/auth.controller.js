@@ -1,7 +1,7 @@
 
 const User = require('../models/user.model.js'); // Adjust the path as needed
 const uploadImage = require('../utils/cloudinary.utils.js'); // Adjust the path as needed
-// const authMiddleware = require('../middleware/auth.middleware.js'); // Adjust the path as needed
+
 
 
 // POST /send-otp
@@ -67,17 +67,11 @@ const login =async (req, res) => {
     if(!isPasswordCorrect){
         return res.status(400).json({message:"Incorrect password"})
     }
-    // If successful, send a response with a success message
+
     const token= await user.generateAccesstoken();
-    // res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"None"})
-    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV==='production', sameSite: "Lax" });
-  
+   
+    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "None" });
     console.log("Login successful:", user);
-    
-
-    
-
-    // res.status(200).json({ message: 'Signin successful', email });
     res.status(200).json({ message: 'Login successful', user });
 }
 
@@ -125,5 +119,4 @@ module.exports = {
     checkAuth,
     sendotp,
     checkotp
-
 }

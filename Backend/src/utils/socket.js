@@ -4,12 +4,9 @@ const express = require("express");
 
 const app = express();
 const server = http.createServer(app);
-
-const FRONTEND_URL = "https://chat-app-three-ochre.vercel.app"; // Change to your frontend URL in development
 const io = new Server(server, {
   cors: {
-    origin: FRONTEND_URL, // Change to your frontend URL in production
-    methods: ["GET", "POST"],
+    origin: ["https://chat-app-three-ochre.vercel.app"], // Change to your frontend URL in production
     credentials: true,
   },
 });
@@ -28,8 +25,6 @@ io.on("connection", (socket) => {
 
   const userId = socket.handshake.query.userId;
   if (userId) userSocketMap[userId] = socket.id;
-
-  // io.emit() is used to send events to all the connected clients
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
