@@ -8,13 +8,17 @@ import { ProfilePage } from './Pages/ProfilePage'
 import { SettingsPage } from './Pages/SettingsPage'
 import {Loader} from 'lucide-react'
 import { UseAuthStore } from "./store/UseAuthStore"
+
 // import { axiosInstance } from './utils/axios'
+import CallPage from './Pages/CallPage'
 import toast,{ Toaster } from 'react-hot-toast'
 import { UseThemeStore } from './store/UseThemeStore'
+import PageLoader from './components/PageLoader'
 
 
 
 export const App = () => {
+   
  const {authUser,checkAuth,isCheckingAuth,onlineUsers} = UseAuthStore();
  console.log(onlineUsers);
  const {theme} = UseThemeStore();
@@ -31,14 +35,16 @@ useEffect(() => {
 if(isCheckingAuth && !authUser){
   return (
   <div className="flex justify-center items-center h-screen">
-   <Loader className="w-16 h-16 animate-spin" />
+    <PageLoader/>
    <span >Checking authentication...</span>
   </div>
   );
 
 }
+console.log(authUser);
 
   return (
+    
     <div data-theme={theme} className="min-h-screen bg-base-100">
       <Navbar />
      <Routes>
@@ -47,12 +53,14 @@ if(isCheckingAuth && !authUser){
       <Route path="/signup" element={!authUser?<SignupPage />:<Navigate to="/"/>} />
       <Route path="/profile" element={authUser ? <ProfilePage />:<Navigate to="/login"/>} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path='/call/:id' element={authUser ? <CallPage />:<Navigate to="/login"/>} />
     
      </Routes>
      <Toaster/>
   
   </div>
-  )
+ 
+  );
 }
 
 

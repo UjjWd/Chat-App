@@ -10,6 +10,7 @@ dotenv.config();
 // Custom modules
 const connectDB = require('./src/db/connection.db.js');
 const authrouter = require('./src/routes/auth.route.js');
+const streamRoutes = require("./src/routes/streamRoutes.js");
 const msgrouter = require('./src/routes/msg.route.js');
 const { app, server } = require('./src/utils/socket.js');
 
@@ -20,7 +21,7 @@ const LOCAL_URL = 'http://localhost:5173';
 
 // CORS configuration
 app.use(cors({
-  origin: FRONTEND_URL, // Change to FRONTEND_URL in production
+  origin: LOCAL_URL, // Change to FRONTEND_URL in production
   credentials: true,
 }));
 
@@ -39,6 +40,7 @@ app.use('/uploads', express.static('uploads'));
 // Routes
 app.use('/auth', authrouter);
 app.use('/messages', msgrouter);
+app.use("/api/stream", streamRoutes);
 
 // 🔥 REMOVE frontend serving in production (handled by Vercel)
 // if (process.env.NODE_ENV === 'production') {

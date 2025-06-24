@@ -1,9 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-// import { axiosInstance } from "../lib/axios";
 import { axiosInstance } from "../utils/axios";
 import { UseAuthStore } from "./UseAuthStore";
-
 export const UseChatStore = create((set, get) => ({
   messages: [],
   users: [],
@@ -59,6 +57,22 @@ export const UseChatStore = create((set, get) => ({
       });
     });
   },
+
+handleVideoCall: async () => {
+  const { selectedUser, sendMessage } = get();
+  if (selectedUser) {
+    const callUrl = `${window.location.origin}/call/${selectedUser._id}`;
+ 
+    
+
+    await sendMessage({ text: `I have started a Video Call. Join me here ${callUrl}` });
+
+    toast.success("Video Call Link Sent Successfully");
+  } else {
+    toast.error("No user selected");
+  }
+},
+
 
   unsubscribeFromMessages: () => {
     const socket = UseAuthStore.getState().socket;
