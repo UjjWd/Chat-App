@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const FRONTEND_URL = "https://chat-app-three-ochre.vercel.app/"; // Change to your frontend URL in development
 const io = new Server(server, {
   cors: {
-    origin: LOCAL_URL, // Change to your frontend URL in production
+    origin: FRONTEND_URL, // Change to your frontend URL in production
   },
 });
 
