@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 const server = http.createServer(app);
 // const FRONTEND_URL = "https://chat-app-three-ochre.vercel.app"; // Change to your frontend URL
-const LOCAL_URL = "http://localhost:5173"; // Change to your frontend URL in development
+const FRONTEND_URL = "https://chat-app-three-ochre.vercel.app/"; // Change to your frontend URL in development
 const io = new Server(server, {
   cors: {
     origin: LOCAL_URL, // Change to your frontend URL in production

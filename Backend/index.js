@@ -17,11 +17,10 @@ const { app, server } = require('./src/utils/socket.js');
 // Constants
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = 'https://chat-app-three-ochre.vercel.app';
-const LOCAL_URL = 'http://localhost:5173';
 
 // CORS configuration
 app.use(cors({
-  origin: LOCAL_URL, // Change to FRONTEND_URL in production
+  origin: FRONTEND_URL, // Change to FRONTEND_URL in production
   credentials: true,
 }));
 
